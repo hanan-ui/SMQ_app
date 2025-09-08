@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Ajouter un nouveau domaine</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="code" class="form-label">Code du domaine *</label>
+                        <input type="text" class="form-control" id="code" name="code" 
+                               placeholder="Ex: D, E, F" required>
+                        <div class="form-text">Code unique identifiant le domaine (lettre ou combinaison de lettres)</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="titre" class="form-label">Titre du domaine *</label>
+                        <input type="text" class="form-control" id="titre" name="titre" 
+                               placeholder="Ex: Accompagnement des étudiants et vie estudiantine" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" 
+                                  rows="4" placeholder="Description détaillée du domaine..."></textarea>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('gestion_domaines') }}" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Annuler
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle"></i> Créer le domaine
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

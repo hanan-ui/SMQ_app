@@ -1,0 +1,34 @@
+{% if session.role == 'admin' %}
+<div class="card mt-4">
+    <div class="card-header bg-success text-white">
+        <h5 class="mb-0"><i class="bi bi-database"></i> Administration de la Base de Données</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('download_demo_db') }}" class="btn btn-outline-success">
+                        <i class="bi bi-download"></i> Télécharger la BDD Complète
+                    </a>
+                    <small class="text-muted">Export complet au format SQL (mysqldump)</small>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('install_demo_route') }}" class="btn btn-outline-primary"
+                       onclick="return confirm('⚠️ Attention! Cette action va effacer les données existantes et installer les données de démonstration. Continuer?')">
+                        <i class="bi bi-database-add"></i> Installer Données Démo
+                    </a>
+                    <small class="text-muted">Réinitialiser avec des données de démonstration</small>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-3 p-3 bg-light rounded">
+            <h6><i class="bi bi-info-circle"></i> Information</h6>
+            <p class="mb-1 small">mysqldump est installé (Version 8.0.42)</p>
+            <p class="mb-0 small">La sauvegarde inclut toutes les tables et données.</p>
+        </div>
+    </div>
+</div>
+{% endif %}

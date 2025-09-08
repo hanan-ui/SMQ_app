@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Gestion des Critères - {{ reference.domaine_code }}.{{ reference.champ_code }}.{{ reference.code }}</h2>
+    <a href="{{ url_for('ajouter_critere', reference_id=reference.id) }}" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> Ajouter un critère
+    </a>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header bg-light">
+        <h5 class="mb-0">Informations de la référence</h5>
+    </div>
+    <div class="card-body">
+        <p><strong>Référence:</strong> {{ reference.domaine_code }}.{{ reference.champ_code }}.{{ reference.code }} - {{ reference.titre }}</p>
+        {% if reference.description %}
+        <p><strong>Description:</strong> {{ reference.description }}</p>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header bg-light">
+        <h5 class="mb-0">Liste des critères</h5>
+    </div>
+    <div class="card-body">
+        {% if criteres %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th width="80px">Numéro</th>
+                        <th>Description</th>
+                        <th width="250px" class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for critere in criteres %}
+                    <tr>
+                        <td><strong>{{ critere.numero }}</strong></td>
+                        <td>{{ critere.description }}</td>
+                        <td class="text-center">
+                            <div class="btn-group" role="group">
+                                <!-- Bouton journal -->
+                                <a href="{{ url_for('journal', reference_id=reference.id) }}" 
+                                   class="btn btn-sm btn-outline-info">
+                                    <i class="bi bi-journal-text"></i> Journal
+                                </a>
+                                <!-- Bouton modifier -->
+                                <a href="{{ url_for('modifier_critere', critere_id=critere.id) }}" 
+                                   class="btn btn-sm btn-warning">
+                                    <i class="bi bi-pencil"></i> Modifier
+                                </a>
+                                <!-- Bouton supprimer -->
+                                <form action="{{ url_for('supprimer_critere', critere_id=critere.id) }}" 
+                                      method="post" 
+                                      style="display:inline;">
+                                    <button type="submit" 
+                                            class="btn btn-sm btn-danger"
+                                            onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce critère ?')">
+                                        <i class="bi bi-trash"></i> Supprimer
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle"></i> Aucun critère n'a été créé pour cette référence.
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="mt-3">
+    <a href="{{ url_for('gestion_references', champ_id=reference.champ_id) }}" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i> Retour aux références
+    </a>
+</div>
+{% endblock %}

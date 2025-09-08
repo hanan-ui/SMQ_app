@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Ajouter un Critère</h2>
+    <a href="{{ url_for('gestion_criteres', reference_id=reference.id) }}" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i> Retour aux critères
+    </a>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header bg-info text-white">
+        <h5 class="mb-0">Informations de la référence</h5>
+    </div>
+    <div class="card-body">
+        <p><strong>Référence:</strong> {{ reference.domaine_code }}.{{ reference.champ_code }}.{{ reference.code }} - {{ reference.titre }}</p>
+        {% if reference.description %}
+        <p><strong>Description:</strong> {{ reference.description }}</p>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Nouveau critère</h5>
+    </div>
+    <div class="card-body">
+        <form method="POST">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="mb-3">
+                        <label for="numero" class="form-label">Numéro *</label>
+                        <input type="number" class="form-control" id="numero" name="numero" required 
+                               min="1" placeholder="1">
+                    </div>
+                </div>
+                <div class="col-md-10">
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description du critère *</label>
+                        <textarea class="form-control" id="description" name="description" rows="3" required 
+                                  placeholder="Décrivez le critère..."></textarea>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <a href="{{ url_for('gestion_criteres', reference_id=reference.id) }}" class="btn btn-secondary me-md-2">
+                    Annuler
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-check-circle"></i> Ajouter le critère
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

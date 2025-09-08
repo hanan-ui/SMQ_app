@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="p-5 mb-4 bg-light rounded-3">
+            <div class="container-fluid py-5">
+                <h1 class="display-5 fw-bold">Système de Management de la Qualité</h1>
+                <p class="col-md-8 fs-4">Application de gestion des domaines, champs, références et critères qualité</p>
+                <a href="/domaines" class="btn btn-primary btn-lg">Voir les domaines</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card text-center mb-4">
+            <div class="card-body">
+                <h2><i class="bi bi-diagram-3"></i></h2>
+                <h5 class="card-title">Domaines</h5>
+                <p class="card-text">Gestion des domaines qualité</p>
+                <a href="/domaines" class="btn btn-outline-primary">Explorer</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center mb-4">
+            <div class="card-body">
+                <h2><i class="bi bi-clipboard-data"></i></h2>
+                <h5 class="card-title">Tableau de bord</h5>
+                <p class="card-text">Statistiques et indicateurs</p>
+                <a href="/dashboard" class="btn btn-outline-primary">Voir</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center mb-4">
+            <div class="card-body">
+                <h2><i class="bi bi-journal-text"></i></h2>
+                <h5 class="card-title">Journaux</h5>
+                <p class="card-text">Journaux de qualité</p>
+                <a href="/domaines" class="btn btn-outline-primary">Consulter</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center mb-4">
+            <div class="card-body">
+                <h2><i class="bi bi-graph-up"></i></h2>
+                <h5 class="card-title">Indicateurs</h5>
+                <p class="card-text">Performance qualité</p>
+                <a href="/dashboard" class="btn btn-outline-primary">Analyser</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

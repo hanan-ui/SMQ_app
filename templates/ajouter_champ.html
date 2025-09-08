@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Ajouter un nouveau champ - Domaine {{ domaine.code }}</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="code" class="form-label">Code du champ *</label>
+                        <input type="text" class="form-control" id="code" name="code" 
+                               placeholder="Ex: D.I, D.II" required>
+                        <div class="form-text">Code unique identifiant le champ dans le domaine</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="titre" class="form-label">Titre du champ *</label>
+                        <input type="text" class="form-control" id="titre" name="titre" 
+                               placeholder="Ex: Admission et orientation des étudiants" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" 
+                                  rows="4" placeholder="Description détaillée du champ..."></textarea>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('gestion_champs', domaine_id=domaine.id) }}" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Annuler
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle"></i> Créer le champ
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

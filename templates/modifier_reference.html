@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Modifier la Référence</h2>
+    <a href="{{ url_for('gestion_references', champ_id=reference.champ_id) }}" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i> Retour aux références
+    </a>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header bg-info text-white">
+        <h5 class="mb-0">Informations du champ</h5>
+    </div>
+    <div class="card-body">
+        <p><strong>Domaine:</strong> {{ reference.domaine_code }} - {{ reference.domaine_titre }}</p>
+        <p><strong>Champ:</strong> {{ reference.champ_code }} - {{ reference.champ_titre }}</p>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Modification de la référence</h5>
+    </div>
+    <div class="card-body">
+        <form method="POST">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="code" class="form-label">Code de la référence *</label>
+                        <input type="text" class="form-control" id="code" name="code" 
+                               value="{{ reference.code }}" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="titre" class="form-label">Titre de la référence *</label>
+                <input type="text" class="form-control" id="titre" name="titre" 
+                       value="{{ reference.titre }}" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control" id="description" name="description" rows="4">{{ reference.description or '' }}</textarea>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <a href="{{ url_for('gestion_references', champ_id=reference.champ_id) }}" class="btn btn-secondary me-md-2">
+                    Annuler
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-check-circle"></i> Modifier la référence
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

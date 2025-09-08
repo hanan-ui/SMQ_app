@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Journal de Qualité</h2>
+    <a href="{{ url_for('gestion_references', champ_id=reference.champ_id) }}" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i> Retour aux références
+    </a>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header bg-info text-white">
+        <h5 class="mb-0">Informations de la référence</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Référence:</strong> {{ reference.domaine_code }}.{{ reference.champ_code }}.{{ reference.code }}</p>
+                <p><strong>Titre:</strong> {{ reference.titre }}</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Domaine:</strong> {{ reference.domaine_code }} - {{ reference.domaine_titre }}</p>
+                <p><strong>Champ:</strong> {{ reference.champ_code }} - {{ reference.champ_titre }}</p>
+            </div>
+        </div>
+        {% if reference.description %}
+        <p><strong>Description:</strong> {{ reference.description }}</p>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Journal de Qualité</h5>
+    </div>
+    <div class="card-body">
+        {% if journal %}
+        <div class="alert alert-success">
+            <i class="bi bi-check-circle"></i> Un journal existe déjà pour cette référence.
+        </div>
+        
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <p><strong>Période:</strong> Du {{ journal.periode_debut }} au {{ journal.periode_fin }}</p>
+                <p><strong>Faculté:</strong> {{ journal.faculte }}</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Statut:</strong> 
+                    <span class="badge bg-{% if journal.statut == 'approuvé' %}success{% elif journal.statut == 'soumis' %}warning{% else %}secondary{% endif %}">
+                        {{ journal.statut }}
+                    </span>
+                </p>
+                <p><strong>Dernière modification:</strong> {{ journal.updated_at.strftime('%d/%m/%Y %H:%M') }}</p>
+            </div>
+        </div>
+        
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <!-- CORRECTION : Utiliser 'journal' au lieu de 'creer_journal' -->
+            <a href="{{ url_for('journal', reference_id=reference.id) }}" class="btn btn-primary me-md-2">
+                <i class="bi bi-pencil"></i> Modifier le journal
+            </a>
+            <a href="{{ url_for('journal', reference_id=reference.id) }}" class="btn btn-outline-primary">
+                <i class="bi bi-eye"></i> Consulter
+            </a>
+        </div>
+        
+        {% else %}
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle"></i> Aucun journal n'a été créé pour cette référence.
+        </div>
+        
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <!-- CORRECTION : Utiliser 'journal' au lieu de 'creer_journal' -->
+            <a href="{{ url_for('journal', reference_id=reference.id) }}" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Créer un nouveau journal
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Section pour afficher les critères associés -->
+<div class="card mt-4">
+    <div class="card-header bg-light">
+        <h5 class="mb-0">Critères associés</h5>
+    </div>
+    <div class="card-body">
+        {% if reference %}
+        <p>Cette référence contient les critères suivants :</p>
+        
+        {% if reference.criteres %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th width="80px">Numéro</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for critere in reference.criteres %}
+                    <tr>
+                        <td><strong>{{ critere.numero }}</strong></td>
+                        <td>{{ critere.description }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="alert alert-warning">
+            <i class="bi bi-exclamation-triangle"></i> Aucun critère n'est associé à cette référence.
+        </div>
+        {% endif %}
+        
+        {% else %}
+        <div class="alert alert-warning">
+            <i class="bi bi-exclamation-triangle"></i> Aucune information sur les critères disponible.
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

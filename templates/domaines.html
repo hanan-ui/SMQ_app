@@ -1,0 +1,76 @@
+<!-- templates/domaines.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Gestion des Domaines</h2>
+    <div>
+        <a href="{{ url_for('ajouter_domaine') }}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Ajouter un domaine
+        </a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Liste des domaines</h5>
+        <div>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-sm btn-outline-secondary">
+                <i class="bi bi-speedometer2"></i> Tableau de bord
+            </a>
+        </div>
+    </div>
+    <div class="card-body">
+        {% if domaines %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Titre</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for domaine in domaines %}
+                    <tr>
+                        <td><strong>{{ domaine.code }}</strong></td>
+                        <td>{{ domaine.titre }}</td>
+                        <td>{{ domaine.description|truncate(100) if domaine.description else '' }}</td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a href="{{ url_for('gestion_champs', domaine_id=domaine.id) }}" class="btn btn-sm btn-info" title="Gérer les champs">
+                                    <i class="bi bi-folder2-open"></i> Champs
+                                </a>
+                                <a href="{{ url_for('download_domaine_pdf', domaine_id=domaine.id) }}" class="btn btn-sm btn-success" title="Télécharger PDF complet">
+                                    <i class="bi bi-file-earmark-pdf"></i> PDF
+                                </a>
+                                <a href="{{ url_for('modifier_domaine', domaine_id=domaine.id) }}" class="btn btn-sm btn-warning" title="Modifier le domaine">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a href="{{ url_for('supprimer_domaine', domaine_id=domaine.id) }}" class="btn btn-sm btn-danger" 
+                                   onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce domaine et toutes ses données associées ?')" title="Supprimer le domaine">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle"></i> Aucun domaine n'a été créé pour le moment.
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="mt-3">
+    <a href="{{ url_for('index') }}" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i> Retour à l'accueil
+    </a>
+</div>
+{% endblock %}
