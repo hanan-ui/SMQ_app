@@ -1,0 +1,194 @@
+                              Les instructions à suivre pour 
+                            l'insallation / l'exécution du code
+
+1-Active d'abord ton environnement virtuel dans cmd pour installe les outils nécessaires si non existe:
+"C:\**** \smq_application\venv\Scripts\activate.bat"
+
+pip install flask
+pip install ...
+
+2-Installer MySQL si non existe:
+
+Dans MySQL dans SQL exécute le code suivant pour créer la base de données d’application:
+
+-- Création de la base de données
+CREATE DATABASE smq_db;
+USE smq_db;
+-- Table : Domaine
+CREATE TABLE domaines (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    code VARCHAR(50) NOT NULL UNIQUE,
+    titre VARCHAR(255) NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+-- Table : Champ
+CREATE TABLE champs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    domaine_id INT,
+    code VARCHAR(50) NOT NULL UNIQUE,
+    titre VARCHAR(255) NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (domaine_id) REFERENCES domaines(id) ON DELETE SET NULL
+);
+-- Table : Référence
+CREATE TABLE `references` (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    champ_id INT,
+    code VARCHAR(50) NOT NULL UNIQUE,
+    titre VARCHAR(255) NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (champ_id) REFERENCES champs(id) ON DELETE SET NULL
+);
+-- Table : Critère
+CREATE TABLE criteres (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    reference_id INT,
+    code VARCHAR(50) NOT NULL,
+    titre VARCHAR(255) NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (reference_id) REFERENCES `references`(id) ON DELETE CASCADE
+);
+-- Table : Journal de Qualité (lié à Référence)
+CREATE TABLE journaux_qualite (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    reference_id INT,
+    type VARCHAR(100),
+    titre VARCHAR(255),
+    description TEXT,
+    date_evenement DATE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (reference_id) REFERENCES `references`(id) ON DELETE CASCADE
+);
+-- Créer la table users
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(100) NOT NULL UNIQUE,
+    full_name VARCHAR(255),
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    role ENUM('admin', 'utilisateur') DEFAULT 'utilisateur',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+-- Insérer l’utilisateur admin avec le mot de passe 
+INSERT INTO users (username, email, password, role)
+VALUES (
+    'admin',
+    'admin@example.com',
+    'admin123',
+    'admin'
+);
+-- Table: qualite_references
+CREATE TABLE qualite_references (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    champ_id INT,
+    code VARCHAR(10) NOT NULL,
+    titre TEXT NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (champ_id) REFERENCES champs(id) ON DELETE SET NULL
+);
+-- Table: indicateurs_performance
+CREATE TABLE indicateurs_performance (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nom VARCHAR(255) NOT NULL,
+    description TEXT,
+    formule TEXT,
+    seuil_acceptable DECIMAL(10,2),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+-- Table: journal_actions
+CREATE TABLE journal_actions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    titre VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    responsable VARCHAR(255),
+    date_debut DATE,
+    date_fin_prevue DATE,
+    statut ENUM('planifié', 'en cours', 'terminé', 'annulé') DEFAULT 'planifié',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+-- Table: journal_indicateurs
+CREATE TABLE journal_indicateurs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    indicateur_id INT,
+    valeur DECIMAL(10,2) NOT NULL,
+    date_mesure DATE NOT NULL,
+    commentaire TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (indicateur_id) REFERENCES indicateurs_performance(id) ON DELETE CASCADE
+);
+-- Table: journal_non_conformites
+CREATE TABLE journal_non_conformites (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    titre VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    criticite ENUM('mineure', 'majeure', 'critique') DEFAULT 'mineure',
+    date_detection DATE NOT NULL,
+    detecteur VARCHAR(255),
+    statut ENUM('ouvert', 'en traitement', 'résolu', 'fermé') DEFAULT 'ouvert',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+-- Table: journal_plans
+CREATE TABLE journal_plans (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    non_conformite_id INT,
+    action_id INT,
+    date_prevue DATE,
+    date_realisation DATE,
+    commentaire TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (non_conformite_id) REFERENCES journal_non_conformites(id) ON DELETE CASCADE,
+    FOREIGN KEY (action_id) REFERENCES journal_actions(id) ON DELETE SET NULL
+);
+-- Table: plans_amelioration
+CREATE TABLE plans_amelioration (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    titre VARCHAR(255) NOT NULL,
+    objectif TEXT NOT NULL,
+    actions_prevues TEXT,
+    responsable VARCHAR(255),
+    date_debut DATE,
+    date_fin_prevue DATE,
+    statut ENUM('proposé', 'approuvé', 'en cours', 'terminé', 'abandonné') DEFAULT 'proposé',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+-- Table: references_domaine_d
+CREATE TABLE references_domaine_d (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    reference_id INT,
+    domaine_id INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (reference_id) REFERENCES `references`(id) ON DELETE CASCADE,
+    FOREIGN KEY (domaine_id) REFERENCES domaines(id) ON DELETE CASCADE
+);
+-- Table: smq_references (nouvelle)
+CREATE TABLE smq_references (é
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    code VARCHAR(50) NOT NULL UNIQUE,
+    titre TEXT NOT NULL,
+    description TEXT,
+    version VARCHAR(20),
+    date_publication DATE,
+    auteur VARCHAR(100),
+    fichier_pdf VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+3-	Entrer le dossier d’application
+4-	Copier le lien de dossier
+5-	Enter CMD
+6-	Accéder au le lien de dossier « cd chemin »
+7-	Taper la commande « python app.py »
+8-	Entrer dans le lien ‘ http://127.0...’
+9-	Voir l’application 
